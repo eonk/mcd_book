@@ -36,7 +36,7 @@ levels(Arrests$released) #Prints the levels, and you can see that "Yes" comes af
 contrasts(Arrests$released) #This function shows you the contrasts associated with a factor. You can see the 1 is associated with "Yes". This is what our model will be predicting, the probability of a "Yes".
 ```
 
-If by any chance, the level of interest is not the one that will be selected by R, we will need to reorder the factor levels. In this particular analysis our goal is to check whether being Black predicts harsher treatment. So, let's reorder the factor in such a way that the model is oriented towards predicting this harsher treatment. This will simply chage the sign of the coefficients and, in that way, may enhance interpretation.
+If by any chance, the level of interest is not the one that will be selected by R, we will need to reorder the factor levels. In this particular analysis our goal is to check whether being Black predicts harsher treatment. So, let's reorder the factor in such a way that the model is oriented towards predicting this harsher treatment. This will simply change the sign of the coefficients and, in that way, may enhance interpretation.
 
 ```{r}
 #Reverse the order
@@ -64,7 +64,7 @@ At the very bottom, below the table of coefficients, are fit indices (including 
 
 The part in the middle of the output shows the coefficients, their standard errors, the statistic, and the associated p-values. The z statistic (sometimes called a Wald z-statistic) does a job similar to the t test in the linear regression model. It is a test of statistical significance assessing whether each input in the model is associated with the dependent variable.
 
-If we focus in the table of coefficients, we can see that all the inputs but *sex* were significant in the model. The estimates that get printed when you run logistic regression give you the change in the log odds of the outcome for a one unit increase in the predictor. Here we see that for every one unit increase in the number of previous police contacts (*checks*), the **log odds** of receiving harsher treatment (versus being released) increases by 0.36 adjusting for the other variables in the model. The reminder variables are categorical predictors with two levels. So what we see is the coefficient for the dummy variables indicating the contrast with their respective baseline or reference category. So, for example, being Black increases the log odds of receiving harsher treatment by 0.49, whereas being employed decreases the log odds of being released by 0.77. As mentioned above, the coefficient for gender was not significant. What are log odds? We will discuss this in a bit.
+If we focus in the table of coefficients, we can see that all the inputs but *sex* were significant in the model. The estimates that get printed when you run logistic regression give you the change in the log odds of the outcome for a one unit increase in the predictor. Here we see that for every one unit increase in the number of previous police contacts (*checks*), the **log odds** of receiving harsher treatment (versus being released) increases by 0.36 adjusting for the other variables in the model. The remaining variables are categorical predictors with two levels. So what we see is the coefficient for the dummy variables indicating the contrast with their respective baseline or reference category. So, for example, being Black increases the log odds of receiving harsher treatment by 0.49, whereas being employed decreases the log odds of being released by 0.77. As mentioned above, the coefficient for gender was not significant. What are log odds? We will discuss this in a bit.
 
 We can also use the `confint()` function to obtain confidence intervals for the estimated coefficients.
 
@@ -99,9 +99,9 @@ library(lessR, quietly= TRUE)
 Logit(harsher ~ checks + colour + sex + employed, data=Arrests, brief=TRUE)
 ```
 
-As with linear regression, the interpretation of regression coefficients is sensitive to the scale of measurement of the predictors. This means one cannot compare the magnitude of the coefficients to compare the relevance of variables to predict the response variable. The same applies to the odd ratios. Tempting and common as this might be, unless the predictors use the same metric (or maybe if they are all categorical) there is little point in comparing the magnitude of the odd ratios in logistic regression. Like the unstardised logistic regression coefficients odd ratios are **not** a measure of effect size that allows comparisons across inputs (Menard, 2012). 
+As with linear regression, the interpretation of regression coefficients is sensitive to the scale of measurement of the predictors. This means one cannot compare the magnitude of the coefficients to compare the relevance of variables to predict the response variable. The same applies to the odd ratios. Tempting and common as this might be, unless the predictors use the same metric (or maybe if they are all categorical) there is little point in comparing the magnitude of the odd ratios in logistic regression. Like the unstandardised logistic regression coefficients odd ratios are **not** a measure of effect size that allows comparisons across inputs (Menard, 2012). 
 
-Finally, you could, in the same way than we did in a previous session, use the `standardize()` function from the `arm` package.
+Finally, you could, in the same way that we did in a previous session, use the `standardize()` function from the `arm` package.
 
 ```{r}
 library(arm)
@@ -138,7 +138,7 @@ fitl_1_prob <- predict(fitl_1, type = "response") #If you want to add this to yo
 fitl_1_prob[1:10]
 ```
 
-It is important to understand that with this type of models we usually generate two types of predictions. One the one hand, we are producing a continuous valued prediction in the form of a probability but we can also generate a predicted class for each case. In many applied settings, the latter will be relevant. A discrete category prediction may be required in order to make a decision. Imagine of a probation officer evaluating the future risk of a client. She/He would want to know whether the case is high risk or not.
+It is important to understand that with these type of models we usually generate two types of predictions. One the one hand, we are producing a continuous valued prediction in the form of a probability but we can also generate a predicted class for each case. In many applied settings, the latter will be relevant. A discrete category prediction may be required in order to make a decision. Imagine a probation officer evaluating the future risk of a client. She/He would want to know whether the case is high risk or not.
 
 ## Assessing model fit I: deviance and pseudo r squared
 
@@ -148,9 +148,9 @@ As you may remember when looking at linear models we could use an F test to chec
 
 A common starting point for assessing model fit is to look at the **log-likelihood statistic** and the **deviance** (also referred to as -2LL). 
 
-The log likelihood aims to provide a measure of how much unexplained variation there is after you fit the mode. Large values indicate poor fit. 
+The log likelihood aims to provide a measure of how much unexplained variation there is after you fit the model. Large values indicate poor fit. 
 
-The deviance, on the other hand, is simply the log likelihood multiplied by -2 and is generally abbraviated as -2LL. The deviance will be a positive value and *larger values indicate worse prediction* of the response variable. It is analogous to the error sum of squares in linear regression. In the same way that OLS linear regression tries to minimise the error sum of squares, maximim likelihood logistic regression tries to minimise the -2LL.
+The deviance, on the other hand, is simply the log likelihood multiplied by -2 and is generally abbreviated as -2LL. The deviance will be a positive value and *larger values indicate worse prediction* of the response variable. It is analogous to the error sum of squares in linear regression. In the same way that OLS linear regression tries to minimise the error sum of squares, maximim likelihood logistic regression tries to minimise the -2LL.
 
 The difference between the -2LL for the model with no predictors and the -2LL for the model with all the predictors is the closer we get in logistic regression to the regression sum of squares. This difference is often called **model chi squared**. And it provides a test of the null hypothesis that all the regression coefficients equal zero. It is, thus, equivalent to the F test in OLS regression.
 
@@ -236,13 +236,13 @@ From classification tables we can derive various useful measures. Two important 
 
 Sensitivity = number of cases with the event and predicted to have the event / number of samples actually presenting the event
 
-In this case this amount to 57 divided by 835 plus 57. The sensitivity is sometimes also considered the **true positive rate** since it measures the accuracy in the event populaiton. On the other hand, the specificity is defined as:
+In this case this amount to 57 divided by 835 plus 57. The sensitivity is sometimes also considered the **true positive rate** since it measures the accuracy in the event population. On the other hand, the specificity is defined as:
 
 Specificity = number of cases without the events and predicted as non-events /  number of cases without the event
 
 In this case this amount to 4278 divided by 4278 plus 56. The **false positive rate** is defined as one minus the specificity.
 
-From the table we produced we can generate these measures automatically. For this sort of things, however, I prefer to go straight to the `confusionMatrix()` function from the `caret` package since it produces a very detailed set of calibration measures that are helpful indicators of how well the model is classifying.
+From the table we produced we can generate these measures automatically. For this sort of thing, however, I prefer to go straight to the `confusionMatrix()` function from the `caret` package since it produces a very detailed set of calibration measures that are helpful indicators of how well the model is classifying.
 
 ```{r}
 library(caret)
@@ -270,7 +270,7 @@ Here we are predicting as receiving harsher treatment anybody with a probability
 
 Potential trade offs here may be appropriate when there are different penalties or costs associated with each type of error. For example, if you are trying to predict a homicide as part of an intervention or prevention program you may give more importance to not making a false negative error. That is you want to identify as many potential homicide victims as possible, even if that means that you will identify as victims individuals that in the end won't be (false positives). On the other hand, if you have limited resources to attend all the cases that you will predict as positives you also need to factor this into the equation. You don't want to use a cut off point that will lead you to identify more cases as potential homicide victims that you can possibly work with.
 
-Similarly, if you think about the criminal justice system, it is essentially built around the idea of avoiding false positives - that is convicting people who are innocent. You will have heard many phrases like "innovent until proven guilty" or "It is far better that 10 guilty men go free than one innocent man is wrongfully convicted". This approach would incline us to err on the side of false negatives, and avoid false positives (higher sensitivity, lower specificity).
+Similarly, if you think about the criminal justice system, it is essentially built around the idea of avoiding false positives - that is convicting people who are innocent. You will have heard many phrases like "innocent until proven guilty" or "It is far better that 10 guilty men go free than one innocent man is wrongfully convicted". This approach would incline us to err on the side of false negatives, and avoid false positives (higher sensitivity, lower specificity).
 
 We may want to see what happens to sensitivity and specificity for different cut off points.  For this we can look at **receiver operating characteristics** or simply [ROC curves](http://en.wikipedia.org/wiki/Receiver_operating_characteristic). This is essentially a tool for evaluating the sensitivity/specificity trade off. The ROC curve can be used for investigating alternate cut offs for class probabilities.
 
@@ -288,7 +288,7 @@ Once we have the object with the information, we can plot the ROC curve.
 plot(rocCURVE, legacy.axes = TRUE) #By default the x-axis goes backwards, we can use the specified option legacy.axes=TRUE, to get 1-spec on the x axis moving from 0 to 1.
 ```
 
-We can see the trajectory of the curve is at first steep, suggesting that sensitivity increases at a greater pace than the decrease in specificity. However we then reach a point at which specificity decreases at a greater rate than the sensitivity increases. If you want to select a cut off that gives you the optimal cut off point you can use the `coords()` function of the pROC package. You can pass arguments to this function so that it returns the best sum of sensitivity and speficitity.
+We can see the trajectory of the curve is at first steep, suggesting that sensitivity increases at a greater pace than the decrease in specificity. However we then reach a point at which specificity decreases at a greater rate than the sensitivity increases. If you want to select a cut off that gives you the optimal cut off point you can use the `coords()` function of the pROC package. You can pass arguments to this function so that it returns the best sum of sensitivity and specificity.
 
 ```{r}
 alt_cutoff1 <- coords(rocCURVE, x = "best", best.method = "closest.topleft")
@@ -302,7 +302,7 @@ The ROC curve can also be used to develop a quantitative assessment of the model
 
 ## Interactions
 
-The data we have been using were obtained by the author of the `effects` package from [Michael Friendly](http://www.datavis.ca/), another prominent contributor to the development of R packages. The data are related to a series of stories revelaed by the Toronto Star and further analysed by Professor Friendly as seen [here](http://www.datavis.ca/courses/VCD/vcd4-handout-2x2.pdf). In these further analysis Friendly proposes a slightly more complex model than then one we have specified so far. This model adds three new predictors (citizenship, age, and year in which the case was processed) and also allows for interactions between race (colour) and year, and race and age.
+The data we have been using were obtained by the author of the `effects` package from [Michael Friendly](http://www.datavis.ca/), another prominent contributor to the development of R packages. The data are related to a series of stories revealed by the Toronto Star and further analysed by Professor Friendly as seen [here](http://www.datavis.ca/courses/VCD/vcd4-handout-2x2.pdf). In these further analysis Friendly proposes a slightly more complex model than the one we have specified so far. This model adds three new predictors (citizenship, age, and year in which the case was processed) and also allows for interactions between race (colour) and year, and race and age.
 
 ```{r}
 fitl_2 <- glm(harsher ~ employed + citizen + checks + colour * year + colour * age, family = binomial, data = Arrests) #Notice this different way of including interactions
@@ -325,7 +325,7 @@ plot(effect("colour:age", fitl_2))
 
 On the other hand, we see a significant interaction between race and age. Young blacks are treated more harshly than young whites. But older blacks treated less harshly than older whites.
 
-We already discussed in a previous session the difficulties of interpreting regression coefficients in models with interactions. Centering and standardising in the way discussed earlier can actually be of help or this purpose.
+We already discussed in a previous session the difficulties of interpreting regression coefficients in models with interactions. Centering and standardising in the way discussed earlier can actually be of help for this purpose.
 
 
 
